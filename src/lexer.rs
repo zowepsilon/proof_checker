@@ -1,5 +1,3 @@
-use std::{fmt::Display, iter::Peekable};
-
 #[derive(Debug, Clone, PartialEq)]
 pub enum TokenData {
     // structure
@@ -10,8 +8,8 @@ pub enum TokenData {
     Comma,
     Dot,
     ThinArrow,
-    FatArrow,
     Pipe,
+    FatArrow,
 
     // literals
     Identifier(String),

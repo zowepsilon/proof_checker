@@ -1,18 +1,7 @@
-Prop AndComm(infer p, infer q):
+Prop Weaken(p, infer q):
   p, q => q
 Proof:
-  AndElim:
-    Ax
-    Modus(p, q):
+  AndElimRight(p):
+    AndIntro:
       Ax
       Ax
-
-Prop AndComm(infer p, infer q):
-  p, q => q
-Proof:
-  AndElim:
-    Ax
-    Modus(p, q):
-      Ax
-      Ax
-

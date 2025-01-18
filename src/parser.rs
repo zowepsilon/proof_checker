@@ -104,7 +104,7 @@ impl Parser {
         Some(program)
     }
 
-    pub fn assert_empty(self) -> Option<()> {
+    fn assert_empty(self) -> Option<()> {
         for Token { data, .. } in self.tokens {
             match data {
                 TD::NewLine => (),
