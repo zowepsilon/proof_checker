@@ -1,0 +1,18 @@
+Prop AndComm(infer p, infer q):
+  p, q => q
+Proof:
+  AndElim:
+    Ax
+    Modus(p, q):
+      Ax
+      Ax
+
+Prop AndComm(infer p, infer q):
+  p, q => q
+Proof:
+  AndElim:
+    Ax
+    Modus(p, q):
+      Ax
+      Ax
+
