@@ -1,3 +1,13 @@
+Prop TopIntro():
+  => Top
+Proof:
+  Admitted
+
+Prop BotElim(infer p):
+  Bot => p
+Proof:
+  Admitted
+
 Prop AndIntro(infer p, infer q):
   p, q => p.q
 Proof:

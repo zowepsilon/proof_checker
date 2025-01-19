@@ -86,7 +86,6 @@ impl Checker {
         match rule.name.as_str() {
             "Admitted" => true,
             "Ax" => context.iter().any(|prop| prop == goal),
-            "TopIntro" => *goal == Formula::Top,
             "BottomElim" => self.proof(&Formula::Bot, context, &rule.children[0]),
             "NotIntro" => if let Formula::Not(inner) = goal {
                 context.push(Formula::clone(inner));
