@@ -2,6 +2,7 @@ mod lexer;
 mod parser;
 mod ast;
 mod checker;
+mod unification;
 
 use lexer::Lexer;
 use parser::Parser;
@@ -29,7 +30,8 @@ fn main() {
                     NoInferAfterInferred(var) => eprintln!("ERROR: non-inferred variable `{var}` may not be put after inferred variables"),
                     IncorrectProof => eprintln!("ERROR: incorrect proof"),
                     UnknownVariable(f, var) => eprintln!("Unknown variable `{}` in {:?}", var, f),
-                    CannotInfer(v) => eprintln!("ERROR: cannot infer variable `{v}` as it is not in the proposition")
+                    CannotInfer(v) => eprintln!("ERROR: cannot infer variable `{v}` as it is not in the proposition"),
+                    UnificationError => eprintln!("ERROR: TODO unification error message"),
                 }
 
                 return;

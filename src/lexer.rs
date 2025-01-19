@@ -10,6 +10,7 @@ pub enum TokenData {
     ThinArrow,
     Pipe,
     FatArrow,
+    Tilde,
 
     // literals
     Identifier(String),
@@ -207,6 +208,7 @@ impl<'a> Iterator for Lexer<'a> {
             ':' => self.token(Colon),
             ',' => self.token(Comma),
             '|' => self.token(Pipe),
+            '~' => self.token(Tilde),
             '.' => self.token(Dot),
             '=' => two_char_token!(
                 '>', 

@@ -188,14 +188,6 @@ impl Parser {
         }, sep: TD::Comma))
     }
 
-    fn formula(&mut self) -> Option<Formula> {
-        if TRACE { dbg!("formula", self.tokens.peek()); }
-        match self.tokens.next()?.data {
-            TD::Identifier(name) => Some(Formula::Var(name)),
-            _ => None,
-        }
-    }
-
     fn proof(&mut self) -> Option<Proof> {
         if TRACE { dbg!("proof", self.tokens.peek()); }
         match self.tokens.next()?.data {
@@ -247,5 +239,42 @@ impl Parser {
         {
             self.tokens.next();
         }
+    }
+}
+
+macro_rules! binop {
+    ($op_tok:pat, $op_tree:expr, $rule:ident, $child:ident) => {
+        fn $rule(&mut self) -> Option<Formula> {
+            let left = self.$child()?;
+
+            if let Some(Token { data: $op_tok, .. }) = self.tokens.peek() {
+                let _ = self.tokens.next();
+                let right = self.$rule()?;
+                
+                Some($op_tree(Box::new(left), Box::new(right)))
+            } else {
+                Some(left)
+            }
+        }
+    }
+}
+
+impl Parser {
+    binop!(TD::Pipe, Formula::Or, formula, conjunction);
+    binop!(TD::Dot, Formula::And, conjunction, implication);
+    binop!(TD::ThinArrow, Formula::Imp, implication, primary);
+
+    fn primary(&mut self) -> Option<Formula> {
+        Some(match self.tokens.next()?.data {
+            TD::Identifier(name) => Formula::Var(name),
+            TD::Tilde => Formula::Not(Box::new(self.primary()?)),
+            TD::ParenBlock(inner) => {
+                let mut inner = Parser::new(inner);
+                let result = inner.formula()?;
+                inner.assert_empty();
+                result
+            }
+            _ => return None,
+        })
     }
 }

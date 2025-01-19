@@ -1,14 +1,15 @@
-use std::collections::{HashMap, HashSet};
+use std::{collections::{HashMap, HashSet}, iter};
 
 use crate::ast::{Formula, Proof, Statement};
 
-#[expect(unused)]
+#[allow(unused_imports)]
+use crate::ast::ContextPrinter;
+
 #[derive(Debug, Clone)]
 struct CheckedStatement {
-    prop: Formula,
+    hypothesis: Vec<Formula>,
+    conclusion: Formula,
     parameters: Vec<String>,
-    vars: HashSet<String>, 
-    inferred_vars: HashSet<String>,
 }
 
 #[derive(Debug, Clone)]
@@ -17,6 +18,7 @@ pub enum CheckingError {
     IncorrectProof,
     UnknownVariable(Formula, String),
     CannotInfer(String),
+    UnificationError,
 }
 
 pub struct Checker {
@@ -68,11 +70,11 @@ impl Checker {
 
         if self.proof(&stmt.prop, &mut stmt.context, &stmt.proof) {
             self.theorems.insert(stmt.name.clone(), CheckedStatement {
-                prop: stmt.prop,
+                hypothesis: stmt.context,
+                conclusion: stmt.prop,
                 parameters,
-                vars,
-                inferred_vars,
             });
+
             Ok(())
         } else {
             Err(CheckingError::IncorrectProof)
@@ -80,6 +82,7 @@ impl Checker {
     }
 
     pub fn proof(&mut self, goal: &Formula, context: &mut Vec<Formula>, rule: &Proof) -> bool {
+        //println!("Proof: {} => {}\n{}", ContextPrinter(context), goal, rule);
         match rule.name.as_str() {
             "Admitted" => true,
             "Ax" => context.iter().any(|prop| prop == goal),
@@ -138,7 +141,36 @@ impl Checker {
                 self.proof(&Formula::Imp(Box::new(hyp.clone()), Box::new(goal.clone())), context, &rule.children[0])
                 && self.proof(hyp, context, &rule.children[1])
             },
-            _ => false,
+            name => match self.theorems.get(name) {
+                Some(CheckedStatement { hypothesis, conclusion, parameters }) => {
+                    use crate::unification::*;
+
+                    let mut hypothesis = hypothesis.clone();
+                    let mut conclusion = conclusion.clone();
+                    
+                    for hyp in &mut hypothesis {
+                        add_substitution_variables(hyp, parameters);
+                    }
+                    add_substitution_variables(&mut conclusion, parameters);
+
+                    if unify(&goal, &mut hypothesis, &mut conclusion).is_err() { return false; }
+                    assert_eq!(assert_complete_substitution(&conclusion), Ok(()));
+                    
+                    let mut map = HashMap::new();
+                    for (var, val) in iter::zip(parameters.iter(), rule.args.iter()) {
+                        map.insert(var, val);
+                    }
+
+                    for hyp in &mut hypothesis {
+                        subst_many(hyp, &map);
+                    }
+                    subst_many(&mut conclusion, &map);
+                    
+                    hypothesis.iter().enumerate().all(|(i, hyp)| self.proof(hyp, context, &rule.children[i]))
+                },
+                None => false,
+            },
         }
     }
 }
+
