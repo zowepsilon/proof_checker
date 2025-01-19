@@ -93,10 +93,6 @@ impl Checker {
                 context.pop();
                 res
             } else { false },
-            "NotElim" => if let Formula::Bot = goal {
-                self.proof(&rule.args[0], context, &rule.children[0]) 
-                && self.proof(&rule.args[1], context, &rule.children[1])
-            } else { false },
             "AndElimLeft" => {
                 self.proof(&Formula::And(Box::new(goal.clone()), Box::new(rule.args[0].clone())), context, &rule.children[0])
             },

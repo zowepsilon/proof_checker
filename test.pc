@@ -1,23 +1,23 @@
 Prop TopIntro():
   => Top
-Proof:
-  Admitted
 
 Prop BotElim(infer p):
   Bot => p
-Proof:
-  Admitted
+
+Prop NotElim(p):
+  p, ~p => Bot
 
 Prop AndIntro(infer p, infer q):
   p, q => p.q
-Proof:
-  Admitted
+
+Prop AndElimLeft(q, infer p):
+  p.q => p
+
+Prop AndElimRight(p, infer q):
+  p.q => q
 
 Prop ExclMid(infer p):
   => p | ~p
-Proof:
-  Admitted
-
 
 Prop AndComm(infer p, infer q):
   q.p => p.q

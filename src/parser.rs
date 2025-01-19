@@ -151,24 +151,41 @@ impl Parser {
 
         inner.assert_empty()?;
         
-        expect!(self, TD::Proof)?;
-        expect!(self, TD::Colon)?;
-        expect!(self, TD::NewLine)?;
+        match self.tokens.next() {
+            Some(Token { data: TD::Proof, .. }) => {
+                expect!(self, TD::Colon)?;
+                expect!(self, TD::NewLine)?;
 
-        let TD::IndentBlock(inner) = self.tokens.next()?.data
-            else { return None; };
+                let TD::IndentBlock(inner) = self.tokens.next()?.data
+                    else { return None; };
 
-        let mut inner = Parser::new(inner);
-        let proof = inner.proof()?;
-        inner.assert_empty()?;
+                let mut inner = Parser::new(inner);
+                let proof = inner.proof()?;
+                inner.assert_empty()?;
 
-        Some(Statement {
-            name,
-            args,
-            context,
-            prop,
-            proof,
-        })
+                Some(Statement {
+                    name,
+                    args,
+                    context,
+                    prop,
+                    proof,
+                })
+            },
+            Some(Token { data: TD::NewLine, .. }) | None => {
+                Some(Statement {
+                    name,
+                    args,
+                    context,
+                    prop,
+                    proof: Proof {
+                        name: "Admitted".to_string(),
+                        args: vec![],
+                        children: vec![],
+                    },
+                })
+            },
+            _ => None,
+        }
     }
 
     fn arg_list(&mut self) -> Option<Vec<(String, bool)>> {
