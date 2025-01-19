@@ -1,7 +1,13 @@
+Prop AndIntro(infer p, infer q):
+  p, q => p.q
+Proof:
+  Admitted
+
 Prop ExclMid(infer p):
   => p | ~p
 Proof:
   Admitted
+
 
 Prop AndComm(infer p, infer q):
   q.p => p.q

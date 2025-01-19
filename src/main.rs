@@ -22,7 +22,7 @@ fn main() {
     let mut checker = Checker::new();
     for stmt in program {
         match checker.check(stmt) {
-            Ok(()) => (),
+            Ok((name, _)) => println!("Ok: {name}"),
             Err(e) => {
                 use checker::CheckingError::*;
 
@@ -39,5 +39,4 @@ fn main() {
         }
     }
 
-    println!("Ok!")
 }

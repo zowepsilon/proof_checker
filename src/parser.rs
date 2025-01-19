@@ -266,6 +266,8 @@ impl Parser {
 
     fn primary(&mut self) -> Option<Formula> {
         Some(match self.tokens.next()?.data {
+            TD::Top => Formula::Top,
+            TD::Bot => Formula::Bot,
             TD::Identifier(name) => Formula::Var(name),
             TD::Tilde => Formula::Not(Box::new(self.primary()?)),
             TD::ParenBlock(inner) => {

@@ -6,7 +6,7 @@ use crate::ast::{Formula, Proof, Statement};
 use crate::ast::ContextPrinter;
 
 #[derive(Debug, Clone)]
-struct CheckedStatement {
+pub struct CheckedStatement {
     hypothesis: Vec<Formula>,
     conclusion: Formula,
     parameters: Vec<String>,
@@ -30,7 +30,7 @@ impl Checker {
         Checker { theorems: HashMap::new() }
     }
 
-    pub fn check(&mut self, mut stmt: Statement) -> Result<(), CheckingError> {
+    pub fn check(&mut self, mut stmt: Statement) -> Result<(String, &CheckedStatement), CheckingError> {
         let mut started_infer = false;
         let mut vars = HashSet::new();
         let mut inferred_vars = HashSet::new();
@@ -75,7 +75,7 @@ impl Checker {
                 parameters,
             });
 
-            Ok(())
+            Ok((stmt.name.clone(), self.theorems.get(&stmt.name).as_ref().expect("prop was just added")))
         } else {
             Err(CheckingError::IncorrectProof)
         }
@@ -97,9 +97,6 @@ impl Checker {
             "NotElim" => if let Formula::Bot = goal {
                 self.proof(&rule.args[0], context, &rule.children[0]) 
                 && self.proof(&rule.args[1], context, &rule.children[1])
-            } else { false },
-            "AndIntro" => if let Formula::And(left, right) = goal {
-                self.proof(left, context, &rule.children[0]) && self.proof(right, context, &rule.children[1])
             } else { false },
             "AndElimLeft" => {
                 self.proof(&Formula::And(Box::new(goal.clone()), Box::new(rule.args[0].clone())), context, &rule.children[0])

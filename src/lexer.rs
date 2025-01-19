@@ -19,6 +19,8 @@ pub enum TokenData {
     Prop,
     Proof,
     Infer,
+    Top,
+    Bot,
 
     // specials
     NewLine,
@@ -74,6 +76,8 @@ impl<'a> Lexer<'a> {
                         "Prop" => TokenData::Prop,
                         "Proof" => TokenData::Proof,
                         "infer" => TokenData::Infer,
+                        "Top" => TokenData::Top,
+                        "Bot" => TokenData::Bot,
                         _ => TokenData::Identifier(content),
                     },
                     pos: start_position,
