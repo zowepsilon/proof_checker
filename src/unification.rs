@@ -75,14 +75,14 @@ pub fn subst_many(f: &mut Formula, map: &HashMap<&String, &Formula>) {
 }
 
 pub fn unify(goal: &Formula, hypothesis: &mut Vec<Formula>, conclusion: &mut Formula) -> Result<(), CheckingError> {
-    //eprintln!("Unify: {goal} = {conclusion} => {}", ContextPrinter(hypothesis));
+    eprintln!("Unify: goal = {goal} <=> ccl = {conclusion} ; Hyp: {}", ContextPrinter(hypothesis));
     let mut constraints = vec![(goal.clone(), conclusion.clone())];
 
     while let Some((left, right)) = constraints.pop() {
-        //eprintln!("  {left} = {right}");
+        eprintln!("  {left} = {right}");
         match (left, right) {
             | (Formula::Top, Formula::Top)
-            | (Formula::Top, Formula::Bot) => (),
+            | (Formula::Bot, Formula::Bot) => (),
             | (Formula::Var(left), Formula::Var(right)) if left == right => (),
             | (Formula::Var(v), value) if v.starts_with('$') => {
                 for (left, right) in &mut constraints {
@@ -120,7 +120,7 @@ pub fn unify(goal: &Formula, hypothesis: &mut Vec<Formula>, conclusion: &mut For
         }
     }
 
-    //eprintln!("=> {conclusion}: {}", ContextPrinter(hypothesis));
+    eprintln!("=> {conclusion}: {}", ContextPrinter(hypothesis));
     for hyp in &mut *hypothesis {
         assert_complete_substitution(hyp).map_err(|_| CheckingError::UnificationError)?;
     }

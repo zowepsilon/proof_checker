@@ -4,13 +4,10 @@ Prop TopIntro():
 Prop BotElim(infer p):
   Bot => p
 
-Prop NotElim(p):
-  p, ~p => Bot
-
 Prop AndIntro(infer p, infer q):
   p, q => p.q
 
-Prop AndElimLeft(q, infer p):
+Prop AndElimLeft(infer p, q):
   p.q => p
 
 Prop AndElimRight(p, infer q):

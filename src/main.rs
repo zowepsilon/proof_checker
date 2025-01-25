@@ -27,7 +27,6 @@ fn main() {
                 use checker::CheckingError::*;
 
                 match e {
-                    NoInferAfterInferred(var) => eprintln!("ERROR: non-inferred variable `{var}` may not be put after inferred variables"),
                     IncorrectProof => eprintln!("ERROR: incorrect proof"),
                     UnknownVariable(f, var) => eprintln!("Unknown variable `{}` in {:?}", var, f),
                     CannotInfer(v) => eprintln!("ERROR: cannot infer variable `{v}` as it is not in the proposition"),
