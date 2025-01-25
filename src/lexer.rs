@@ -238,12 +238,18 @@ impl<'a> Iterator for Lexer<'a> {
                 },
                 {
                     loop {
-                        if matches!(self.chars.next(), Option::Some('\n') | None) {
-                            self.new_line();
-                            break;
+                        match self.chars.next() {
+                            Some('\n') => {
+                                self.new_line();
+                                self.after_newline = true;
+
+                                break self.token(NewLine);
+                            },
+                            None => return None,
+                            _ => ()
+
                         }
                     }
-                    self.next()?
                 }
             },
             '\n' => {
