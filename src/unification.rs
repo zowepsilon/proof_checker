@@ -79,7 +79,7 @@ pub fn unify(goal: &Formula, hypothesis: &mut Vec<Formula>, conclusion: &mut For
     let mut constraints = vec![(goal.clone(), conclusion.clone())];
 
     while let Some((left, right)) = constraints.pop() {
-        eprintln!("  {left} = {right}");
+        //eprintln!("  {left} = {right}");
         match (left, right) {
             | (Formula::Top, Formula::Top)
             | (Formula::Bot, Formula::Bot) => (),
@@ -120,7 +120,7 @@ pub fn unify(goal: &Formula, hypothesis: &mut Vec<Formula>, conclusion: &mut For
         }
     }
 
-    eprintln!("=> {conclusion}: {}", ContextPrinter(hypothesis));
+    //eprintln!("=> {conclusion}: {}", ContextPrinter(hypothesis));
     for hyp in &mut *hypothesis {
         assert_complete_substitution(hyp).map_err(|_| CheckingError::UnificationError)?;
     }
@@ -128,4 +128,3 @@ pub fn unify(goal: &Formula, hypothesis: &mut Vec<Formula>, conclusion: &mut For
 
     Ok(())
 }
-

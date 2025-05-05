@@ -58,7 +58,7 @@ impl Display for Formula {
             Formula::Top => write!(f, "Top"),
             Formula::Bot => write!(f, "Bot"),
             Formula::Var(v) => write!(f, "{v}"),
-            Formula::Not(inner) => write!(f, "{inner}"),
+            Formula::Not(inner) => write!(f, "~{inner}"),
             Formula::And(left, right) => write!(f, "({left} . {right})"),
             Formula::Or(left, right) => write!(f, "({left} | {right})"),
             Formula::Imp(left, right) => write!(f, "({left} -> {right})"),

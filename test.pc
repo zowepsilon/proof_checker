@@ -15,8 +15,8 @@ Prop AndElimLeft(infer p, q):
 Prop AndElimRight(p, infer q):
   p.q => q
 
-Prop ExclMid(infer p):
-  => p | ~p
+Prop DoubleNegElim(infer p):
+  ~~p => p
 
 // SOME PROOFS
 
@@ -34,3 +34,17 @@ Prop AndComm2(infer p, infer q):
 Proof:
   AndComm:
     Ax
+
+Prop ExclMid(infer p):
+  => p | ~p
+Proof:
+  DoubleNegElim:
+    NotIntro:
+      NotElim(p | ~p):
+        OrIntroRight:
+          NotIntro:
+            NotElim(p | ~p):
+              OrIntroLeft:
+                Ax
+              Ax
+        Ax
