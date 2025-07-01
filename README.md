@@ -4,7 +4,7 @@ A natural deduction proof checker.
 
 This proof checker features hypothesis inference using a little bit of unification.
 
-For instance in the rule: 
+For instance in the following rule: 
 ```math
 \frac{\Gamma ⊦ F}{ \Gamma ⊦ F \lor G} \text{(or left introduction)}
 ```
