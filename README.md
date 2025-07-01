@@ -6,7 +6,7 @@ This proof checker features hypothesis inference using a little bit of unificati
 
 For instance in the rule: 
 ```math
-\frac{Gamma \assert F}{Gamma \assert F \lor G} \text{(or left introduction)}
+\frac{Gamma ⊦ F}{Gamma ⊦ F \lor G} \text{(or left introduction)}
 ```
 
 ```
