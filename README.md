@@ -33,3 +33,12 @@ Proof:
       Ax
 
 ```
+
+### Architecture
+
+- `src/main.rs`: entry point. Iterates over every propositions and their proofs.
+- `src/lexer.rs`: lexer
+- `src/parser.rs`: recursive descent parser
+- `src/ast.rs`: AST types and pretty printing
+- `src/checker.rs`: check the validity of the proofs with a tree traversal
+- `src/unification.rs`: unification algorithm for hypothesis inference
