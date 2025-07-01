@@ -40,5 +40,5 @@ Proof:
 - `src/lexer.rs`: lexer
 - `src/parser.rs`: recursive descent parser
 - `src/ast.rs`: AST types and pretty printing
-- `src/checker.rs`: check the validity of the proofs with a tree traversal
+- `src/checker.rs`: checks the validity of the proofs with a tree traversal
 - `src/unification.rs`: unification algorithm for hypothesis inference
