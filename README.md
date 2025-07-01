@@ -9,7 +9,7 @@ For instance in the rule:
 \frac{\Gamma ⊦ F}{ \Gamma ⊦ F \lor G} \text{(or left introduction)}
 ```
 
-the program can infer that the hypothesis must be `F` from the conclusion and the shape of the rule only.
+the program can infer that the hypothesis must be $F$ from the conclusion and the shape of the rule only.
 
 ### Examples
 
